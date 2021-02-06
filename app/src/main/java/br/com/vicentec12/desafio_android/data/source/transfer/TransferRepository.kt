@@ -1,31 +1,22 @@
 package br.com.vicentec12.desafio_android.data.source.transfer
 
+import br.com.vicentec12.desafio_android.data.model.Transfer
 import br.com.vicentec12.desafio_android.data.source.Remote
+import br.com.vicentec12.desafio_android.data.source.Result
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TransferRepository @Inject constructor(
-    @Remote private val mTransferLocalDataSource: TransferDataSource
+    @Remote private val mTransferLocalDataSource: TransferDataSource,
 ) : TransferDataSource {
 
-    override fun listTransfers(
-        mLimit: String,
-        mOffset: String,
-        mCallback: TransferDataSource.OnListTransfersCallback
-    ) {
-        mTransferLocalDataSource.listTransfers(mLimit, mOffset, mCallback)
-    }
+    override suspend fun listTransfers(mLimit: String, mOffset: String) =
+        mTransferLocalDataSource.listTransfers(mLimit, mOffset)
 
-    override fun getMyBalance(mCallback: TransferDataSource.OnGetBalanceCallback) {
-        mTransferLocalDataSource.getMyBalance(mCallback)
-    }
+    override suspend fun getMyBalance() = mTransferLocalDataSource.getMyBalance()
 
-    override fun getTransferDetails(
-        mId: String,
-        mCallback: TransferDataSource.OnGetTransferDetails
-    ) {
-        mTransferLocalDataSource.getTransferDetails(mId, mCallback)
-    }
+    override suspend fun getTransferDetails(mId: String): Result<Transfer?> =
+        mTransferLocalDataSource.getTransferDetails(mId)
 
 }

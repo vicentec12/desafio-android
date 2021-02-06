@@ -3,19 +3,20 @@ package br.com.vicentec12.desafio_android.ui.transfers
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import br.com.vicentec12.desafio_android.data.model.Transfer
 import br.com.vicentec12.desafio_android.data.source.AppSharedPreferences
+import br.com.vicentec12.desafio_android.data.source.Result
 import br.com.vicentec12.desafio_android.data.source.transfer.TransferDataSource
-import br.com.vicentec12.desafio_android.data.source.transfer.TransferDataSource.OnListTransfersCallback
 import br.com.vicentec12.desafio_android.di.ActivityScope
 import br.com.vicentec12.desafio_android.extensions.toCurrency
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ActivityScope
 class TransfersViewModel @Inject constructor(
     private val mTransferRepository: TransferDataSource,
-    private val mAppSharedPreferences: AppSharedPreferences
+    private val mAppSharedPreferences: AppSharedPreferences,
 ) : ViewModel() {
 
     companion object {
@@ -69,14 +70,14 @@ class TransfersViewModel @Inject constructor(
     }
 
     fun listTransfers(mShowLoading: Boolean = true, mForceLoad: Boolean = false) {
-        if (transfers.value?.size == 0 || mForceLoad) {
-            if (mShowLoading)
-                _childFlipper.value = CHILD_PROGRESS
-            mTransferRepository.listTransfers(
-                "10",
-                "${_transfersOffset.value!!}",
-                object : OnListTransfersCallback {
-                    override fun onSuccess(mMessage: Int, mTransfers: MutableList<Transfer?>) {
+        viewModelScope.launch {
+            if (transfers.value?.size == 0 || mForceLoad) {
+                if (mShowLoading)
+                    _childFlipper.value = CHILD_PROGRESS
+                when (val result =
+                    mTransferRepository.listTransfers("10", "${_transfersOffset.value!!}")) {
+                    is Result.Success -> {
+                        val mTransfers = result.mData
                         _transfersOffset.value = _transfersOffset.value?.plus(1)
                         _isLoading.value = false
                         _isTransfersFinish.value = mTransfers.size < 10
@@ -88,12 +89,12 @@ class TransfersViewModel @Inject constructor(
                         _transfers.value = mNewTransfers
                         _childFlipper.value = CHILD_RECYCLER
                     }
-
-                    override fun onError(mMessage: Int) {
-                        _messageError.value = mMessage
+                    is Result.Error -> {
+                        _messageError.value = result.mMessage
                         _childFlipper.value = CHILD_MESSAGE_ERROR
                     }
-                })
+                }
+            }
         }
     }
 
@@ -109,19 +110,20 @@ class TransfersViewModel @Inject constructor(
     }
 
     fun getMyBalance() {
-        _childFlipperBalance.value = CHILD_BALANCE_PROGRESS
-        mTransferRepository.getMyBalance(object : TransferDataSource.OnGetBalanceCallback {
-            override fun onSuccess(mMessage: Int, mMyBalance: String) {
-                _myBalance.value = mMyBalance
-                _childFlipperBalance.value =
-                    getVisibilityBalance(visibilityBalance.value ?: 0)
+        viewModelScope.launch {
+            _childFlipperBalance.value = CHILD_BALANCE_PROGRESS
+            when (val result = mTransferRepository.getMyBalance()) {
+                is Result.Success -> {
+                    _myBalance.value = result.mData
+                    _childFlipperBalance.value =
+                        getVisibilityBalance(visibilityBalance.value ?: 0)
+                }
+                is Result.Error -> {
+                    _myBalance.value = 0.0.toCurrency()
+                    _childFlipperBalance.value = CHILD_BALANCE_LABEL
+                }
             }
-
-            override fun onError(mMessage: Int) {
-                _myBalance.value = 0.0.toCurrency()
-                _childFlipperBalance.value = CHILD_BALANCE_LABEL
-            }
-        })
+        }
     }
 
     fun setBalanceVisibility() {
@@ -132,7 +134,7 @@ class TransfersViewModel @Inject constructor(
             _childFlipperBalance.value = getVisibilityBalance(visibility)
     }
 
-    fun getVisibilityBalance(mVisibility: Int) =
+    private fun getVisibilityBalance(mVisibility: Int) =
         if (mVisibility == 0) CHILD_BALANCE_INVISIBLE else CHILD_BALANCE_LABEL
 
 }

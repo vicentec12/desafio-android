@@ -3,14 +3,17 @@ package br.com.vicentec12.desafio_android.ui.transfer_details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import br.com.vicentec12.desafio_android.data.model.Transfer
+import br.com.vicentec12.desafio_android.data.source.Result
 import br.com.vicentec12.desafio_android.data.source.transfer.TransferDataSource
 import br.com.vicentec12.desafio_android.di.ActivityScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ActivityScope
 class TransferDetailsViewModel @Inject constructor(
-    private val mTransferDataSource: TransferDataSource
+    private val mTransferDataSource: TransferDataSource,
 ) : ViewModel() {
 
     companion object {
@@ -32,22 +35,19 @@ class TransferDetailsViewModel @Inject constructor(
         get() = _childFlipper
 
     fun getTrasferDetails(mTransferId: String?) {
-        if (_transfer.value == null) {
-            _childFlipper.value = CHILD_PROGRESS
-            if (transfer.value == null) {
-                mTransferDataSource.getTransferDetails(
-                    mTransferId ?: "",
-                    object : TransferDataSource.OnGetTransferDetails {
-                        override fun onSuccess(mMessage: Int, mTransfer: Transfer) {
-                            _childFlipper.value = CHILD_RECEIPT
-                            _transfer.value = mTransfer
-                        }
-
-                        override fun onError(mMessage: Int) {
-                            _childFlipper.value = CHILD_MESSAGE_ERROR
-                            _messageError.value = mMessage
-                        }
-                    })
+        viewModelScope.launch {
+            if (_transfer.value == null) {
+                _childFlipper.value = CHILD_PROGRESS
+                when (val response = mTransferDataSource.getTransferDetails(mTransferId ?: "")) {
+                    is Result.Success -> {
+                        _childFlipper.value = CHILD_RECEIPT
+                        _transfer.value = response.mData
+                    }
+                    is Result.Error -> {
+                        _childFlipper.value = CHILD_MESSAGE_ERROR
+                        _messageError.value = response.mMessage
+                    }
+                }
             }
         }
     }
