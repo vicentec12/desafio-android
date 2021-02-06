@@ -3,11 +3,13 @@ package br.com.vicentec12.desafio_android.ui.transfer_details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import br.com.vicentec12.desafio_android.data.model.Transfer
 import br.com.vicentec12.desafio_android.data.source.transfer.TransferDataSource
+import br.com.vicentec12.desafio_android.di.ActivityScope
+import javax.inject.Inject
 
-class TransferDetailsViewModel(
+@ActivityScope
+class TransferDetailsViewModel @Inject constructor(
     private val mTransferDataSource: TransferDataSource
 ) : ViewModel() {
 
@@ -47,14 +49,6 @@ class TransferDetailsViewModel(
                         }
                     })
             }
-        }
-    }
-
-    class TransferDetailsViewModelFactory(
-        private val mTransferDataSource: TransferDataSource
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return TransferDetailsViewModel(mTransferDataSource) as T
         }
     }
 

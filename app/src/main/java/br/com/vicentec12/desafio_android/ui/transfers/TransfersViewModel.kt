@@ -8,9 +8,12 @@ import br.com.vicentec12.desafio_android.data.model.Transfer
 import br.com.vicentec12.desafio_android.data.source.AppSharedPreferences
 import br.com.vicentec12.desafio_android.data.source.transfer.TransferDataSource
 import br.com.vicentec12.desafio_android.data.source.transfer.TransferDataSource.OnListTransfersCallback
+import br.com.vicentec12.desafio_android.di.ActivityScope
 import br.com.vicentec12.desafio_android.extensions.toCurrency
+import javax.inject.Inject
 
-class TransfersViewModel(
+@ActivityScope
+class TransfersViewModel @Inject constructor(
     private val mTransferRepository: TransferDataSource,
     private val mAppSharedPreferences: AppSharedPreferences
 ) : ViewModel() {
@@ -131,14 +134,5 @@ class TransfersViewModel(
 
     fun getVisibilityBalance(mVisibility: Int) =
         if (mVisibility == 0) CHILD_BALANCE_INVISIBLE else CHILD_BALANCE_LABEL
-
-    class HomeViewModelFactory(
-        private val mTransferRepository: TransferDataSource,
-        private val mAppSharedPreferences: AppSharedPreferences
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return TransfersViewModel(mTransferRepository, mAppSharedPreferences) as T
-        }
-    }
 
 }

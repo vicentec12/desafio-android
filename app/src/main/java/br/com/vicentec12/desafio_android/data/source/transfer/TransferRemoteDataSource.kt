@@ -3,15 +3,17 @@ package br.com.vicentec12.desafio_android.data.source.transfer
 import br.com.vicentec12.desafio_android.R
 import br.com.vicentec12.desafio_android.data.model.Balance
 import br.com.vicentec12.desafio_android.data.model.Transfer
-import br.com.vicentec12.desafio_android.data.source.RetrofitApi
-import br.com.vicentec12.desafio_android.data.source.TransfersService
+import br.com.vicentec12.desafio_android.data.source.retrofit_api.TransfersService
 import br.com.vicentec12.desafio_android.extensions.toCurrency
 import br.com.vicentec12.desafio_android.util.AppExecutors
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TransferRemoteDataSource private constructor(
+@Singleton
+class TransferRemoteDataSource @Inject constructor(
     private val mTransfersService: TransfersService,
     private val mAppExecutors: AppExecutors
 ) : TransferDataSource {
@@ -77,7 +79,7 @@ class TransferRemoteDataSource private constructor(
         mCallback: TransferDataSource.OnGetTransferDetails
     ) {
         mAppExecutors.networkIO.execute {
-            RetrofitApi.mTransfersService.myStatementDetail(mId)
+            mTransfersService.myStatementDetail(mId)
                 .enqueue(object : Callback<Transfer?> {
                     override fun onResponse(call: Call<Transfer?>, response: Response<Transfer?>) {
                         if (response.isSuccessful) {
@@ -98,28 +100,6 @@ class TransferRemoteDataSource private constructor(
 
                 })
         }
-    }
-
-    companion object {
-
-        @JvmStatic
-        private var mINSTANCE: TransferRemoteDataSource? = null
-
-        @JvmStatic
-        fun getInstance(
-            mTransfersService: TransfersService,
-            mAppExecutors: AppExecutors
-        ) = mINSTANCE ?: synchronized(TransferRemoteDataSource::class.java) {
-            mINSTANCE ?: TransferRemoteDataSource(mTransfersService, mAppExecutors).also {
-                mINSTANCE = it
-            }
-        }
-
-        @JvmStatic
-        fun destroyInstance() {
-            mINSTANCE = null
-        }
-
     }
 
 }

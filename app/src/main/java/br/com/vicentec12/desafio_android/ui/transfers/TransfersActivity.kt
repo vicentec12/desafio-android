@@ -5,29 +5,25 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import br.com.vicentec12.desafio_android.ChallengeApp
+import br.com.vicentec12.desafio_android.R
 import br.com.vicentec12.desafio_android.data.model.Transfer
-import br.com.vicentec12.desafio_android.data.source.AppSharedPreferences
-import br.com.vicentec12.desafio_android.data.source.transfer.TransferRemoteDataSource
-import br.com.vicentec12.desafio_android.data.source.transfer.TransferRepository
 import br.com.vicentec12.desafio_android.databinding.ActivityTransfersBinding
 import br.com.vicentec12.desafio_android.interfaces.OnItemClickListener
 import br.com.vicentec12.desafio_android.ui.transfer_details.TransferDetailsActivity
-import br.com.vicentec12.desafio_android.util.Inject
+import javax.inject.Inject
 
 class TransfersActivity : AppCompatActivity(), View.OnClickListener, OnItemClickListener {
 
     private lateinit var mBinding: ActivityTransfersBinding
 
-    private val mViewModel: TransfersViewModel by viewModels(
-        factoryProducer = {
-            TransfersViewModel.HomeViewModelFactory(
-                Inject.provideTransferRepository(),
-                AppSharedPreferences.getInstance(this@TransfersActivity)
-            )
-        }
-    )
+    @Inject
+    lateinit var mFactory: ViewModelProvider.Factory
+
+    private val mViewModel: TransfersViewModel by viewModels(factoryProducer = { mFactory })
 
     private val mRecyclerScrollListener: RecyclerView.OnScrollListener by lazy {
         object : RecyclerView.OnScrollListener() {
@@ -46,9 +42,12 @@ class TransfersActivity : AppCompatActivity(), View.OnClickListener, OnItemClick
     private lateinit var mAdapter: TransfersAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (applicationContext as ChallengeApp).mAppComponent
+            .transfersComponent().create().inject(this)
         super.onCreate(savedInstanceState)
         mBinding = ActivityTransfersBinding.inflate(layoutInflater).apply {
             setContentView(root)
+            lytToolbar.toolbar.setTitle(R.string.title_transfer_activity)
             setSupportActionBar(lytToolbar.toolbar)
             viewModel = mViewModel
             lifecycleOwner = this@TransfersActivity
@@ -59,8 +58,6 @@ class TransfersActivity : AppCompatActivity(), View.OnClickListener, OnItemClick
 
     override fun onDestroy() {
         super.onDestroy()
-        TransferRepository.destroyInstance()
-        TransferRemoteDataSource.destroyInstance()
         mBinding.rvwHome.removeOnScrollListener(mRecyclerScrollListener)
     }
 

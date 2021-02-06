@@ -3,8 +3,11 @@ package br.com.vicentec12.desafio_android.data.source
 import android.content.Context
 import android.content.SharedPreferences
 import br.com.vicentec12.desafio_android.data.source.transfer.TransferRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AppSharedPreferences(private val mContext: Context) {
+@Singleton
+class AppSharedPreferences @Inject constructor(private val mContext: Context) {
 
     private fun getEditorSharedPreferences(): SharedPreferences.Editor {
         val preferences = mContext.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)

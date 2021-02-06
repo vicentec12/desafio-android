@@ -1,4 +1,4 @@
-package br.com.vicentec12.desafio_android.data.source
+package br.com.vicentec12.desafio_android.data.source.retrofit_api
 
 import br.com.vicentec12.desafio_android.data.model.Balance
 import br.com.vicentec12.desafio_android.data.model.Transfer
@@ -10,18 +10,18 @@ import retrofit2.http.Path
 
 interface TransfersService {
 
-    @Headers(value = ["token: ${RetrofitApi.mToken}"])
+    @Headers(value = ["token: ${RetrofitModule.mToken}"])
     @GET("myStatement/{limit}/{offset}")
     fun myStatement(
         @Path("limit") mLimit: String,
         @Path("offset") mOffset: String
     ): Call<TransferResult>
 
-    @Headers(value = ["token: ${RetrofitApi.mToken}"])
+    @Headers(value = ["token: ${RetrofitModule.mToken}"])
     @GET("myBalance")
     fun myBalance(): Call<Balance>
 
-    @Headers(value = ["token: ${RetrofitApi.mToken}"])
+    @Headers(value = ["token: ${RetrofitModule.mToken}"])
     @GET("/myStatement/detail/{id}")
     fun myStatementDetail(@Path("id") mId: String): Call<Transfer?>
 

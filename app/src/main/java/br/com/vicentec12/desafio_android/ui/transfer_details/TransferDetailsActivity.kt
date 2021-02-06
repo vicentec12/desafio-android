@@ -8,24 +8,27 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import br.com.vicentec12.desafio_android.ChallengeApp
 import br.com.vicentec12.desafio_android.R
 import br.com.vicentec12.desafio_android.databinding.ActivityTransferDetailsBinding
-import br.com.vicentec12.desafio_android.util.Inject
 import br.com.vicentec12.desafio_android.util.ShareUtil
+import javax.inject.Inject
 
 class TransferDetailsActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var mBinding: ActivityTransferDetailsBinding
 
-    private val mViewModel: TransferDetailsViewModel by viewModels(
-        factoryProducer = {
-            TransferDetailsViewModel.TransferDetailsViewModelFactory(Inject.provideTransferRepository())
-        }
-    )
+    @Inject
+    lateinit var mFactory: ViewModelProvider.Factory
+
+    private val mViewModel: TransferDetailsViewModel by viewModels(factoryProducer = { mFactory })
 
     private var mTransferId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (applicationContext as ChallengeApp).mAppComponent
+            .transferDetailsComponent().create().inject(this)
         super.onCreate(savedInstanceState)
         mBinding = ActivityTransferDetailsBinding.inflate(layoutInflater).apply {
             setContentView(root)

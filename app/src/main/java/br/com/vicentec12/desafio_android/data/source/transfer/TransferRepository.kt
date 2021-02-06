@@ -1,7 +1,12 @@
 package br.com.vicentec12.desafio_android.data.source.transfer
 
-class TransferRepository private constructor(
-    private val mTransferLocalDataSource: TransferDataSource
+import br.com.vicentec12.desafio_android.data.source.Remote
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class TransferRepository @Inject constructor(
+    @Remote private val mTransferLocalDataSource: TransferDataSource
 ) : TransferDataSource {
 
     override fun listTransfers(
@@ -21,24 +26,6 @@ class TransferRepository private constructor(
         mCallback: TransferDataSource.OnGetTransferDetails
     ) {
         mTransferLocalDataSource.getTransferDetails(mId, mCallback)
-    }
-
-    companion object {
-
-        private var INSTANCE: TransferRepository? = null
-
-        @JvmStatic
-        fun getInstance(mTransferLocalDataSource: TransferDataSource) =
-            INSTANCE ?: synchronized(TransferRepository::class.java) {
-                INSTANCE ?: TransferRepository(mTransferLocalDataSource).also { INSTANCE = it }
-            }
-
-
-        @JvmStatic
-        fun destroyInstance() {
-            INSTANCE = null
-        }
-
     }
 
 }
