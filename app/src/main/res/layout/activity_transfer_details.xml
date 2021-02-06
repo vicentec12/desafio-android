@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="br.com.vicentec12.desafio_android.ui.transfer_details.TransferDetailsViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.transfer_details.TransferDetailsActivity">
+
+        <include
+            android:id="@+id/lyt_toolbar"
+            layout="@layout/layout_toolbar" />
+
+        <ViewFlipper
+            android:id="@+id/vwf_transfer_details"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/minor_spacing"
+            android:inAnimation="@android:anim/fade_in"
+            app:displayChild="@{viewModel.childFlipper}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lyt_toolbar">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="@dimen/default_spacing"
+                    app:layout_constraintBottom_toTopOf="@id/btn_share"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/llc_transfer_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:padding="@dimen/default_spacing"
+                            android:text="@string/label_receipt"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginBottom="@dimen/default_spacing"
+                            android:background="@color/colorGrayApp" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:text="@string/label_transfer_type"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvw_transfer_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:layout_marginBottom="@dimen/default_spacing"
+                            android:text="@{viewModel.transfer.description}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            tools:text="Transferência enviada" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:text="@string/label_value"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvw_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:layout_marginBottom="@dimen/default_spacing"
+                            android:text="@{viewModel.transfer.amountCurrency}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            tools:text="R$ 100,00" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:text="@{viewModel.transfer.isOutTransfer ? @string/label_receiver : @string/label_paying}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:text="@string/label_receiver" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvw_receiver"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:layout_marginBottom="@dimen/default_spacing"
+                            android:text="@{viewModel.transfer.receiver}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            tools:text="David Bond" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:text="@string/label_bank_name"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:visibility="@{viewModel.transfer.bankName.empty ? View.GONE : View.VISIBLE}" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvw_bank_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:layout_marginBottom="@dimen/default_spacing"
+                            android:text="@{viewModel.transfer.bankName}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:visibility="@{viewModel.transfer.bankName.empty ? View.GONE : View.VISIBLE}"
+                            tools:text="Banco Phi" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:text="@string/label_date_time"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvw_date_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:layout_marginBottom="@dimen/default_spacing"
+                            android:text="@{viewModel.transfer.formattedDateTime}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            tools:text="13/10/2020 - 15:27:02" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:text="@string/label_authentication"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvw_authentication"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/default_spacing"
+                            android:layout_marginTop="@dimen/half_spacing"
+                            android:layout_marginBottom="@dimen/default_spacing"
+                            android:text="@{viewModel.transfer.authentication}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            tools:text="F1E0E93D-0181-429F-9598-3665AFFBBDF0" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </ScrollView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_share"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/default_spacing"
+                    android:layout_marginBottom="@dimen/half_spacing"
+                    android:text="@string/label_share"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                android:id="@+id/lyt_error_message"
+                layout="@layout/layout_error_message"
+                app:message="@{viewModel.messageError == 0 ? @string/message_error_server : context.getString(viewModel.messageError)}" />
+
+        </ViewFlipper>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

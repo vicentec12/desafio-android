@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="message"
+            type="String" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/default_spacing">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvw_error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@{message}"
+            android:textColor="@color/colorGreenApp"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            tools:text="@string/message_error_server" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_spacing"
+            android:text="@string/label_try_again" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

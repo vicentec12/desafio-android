@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="transfer"
+            type="br.com.vicentec12.desafio_android.data.model.Transfer" />
+
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/vw_pix"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginVertical="@dimen/half_spacing"
+                android:background="@color/colorWhiteApp"
+                android:visibility="@{transfer.isPixTransfer ? View.VISIBLE : View.GONE }"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/colorGrayApp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/cvw_marker"
+                app:layout_constraintRight_toRightOf="@id/cvw_marker"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvw_marker"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="@dimen/default_spacing"
+                app:cardBackgroundColor="@color/colorGreenApp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/colorWhite"
+                app:strokeWidth="3dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvw_transfer_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/default_spacing"
+                android:layout_marginTop="@dimen/bigger_spacing"
+                android:text="@{transfer.description}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/cvw_marker"
+                app:layout_constraintRight_toLeftOf="@id/cvw_pix"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Transferência Pix realizada" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvw_receiver"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/half_spacing"
+                android:layout_marginBottom="@dimen/default_spacing"
+                android:text="@{transfer.outTransfer ? transfer.receiver : @string/label_your_account}"
+                android:textColor="@color/colorGrayApp"
+                app:layout_constraintLeft_toLeftOf="@id/tvw_transfer_type"
+                app:layout_constraintRight_toRightOf="@id/tvw_transfer_type"
+                app:layout_constraintTop_toBottomOf="@id/tvw_transfer_type"
+                tools:text="Michel SkyWalker" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvw_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/half_spacing"
+                android:layout_marginBottom="@dimen/bigger_spacing"
+                android:text="@{transfer.amountSignalCurrency}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/tvw_transfer_type"
+                app:layout_constraintRight_toRightOf="@id/tvw_transfer_type"
+                app:layout_constraintTop_toBottomOf="@id/tvw_receiver"
+                tools:text="-R$ 30,00" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvw_pix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bigger_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:visibility="@{transfer.isPixTransfer ? View.VISIBLE : View.INVISIBLE }"
+                app:cardBackgroundColor="@color/colorGreenApp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/default_spacing"
+                    android:layout_marginVertical="@dimen/minor_spacing"
+                    android:text="@string/label_pix"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvw_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/minor_spacing"
+                android:layout_marginBottom="@dimen/default_spacing"
+                android:text="@{transfer.formattedDate}"
+                android:textColor="@color/colorGrayApp"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="@id/cvw_pix"
+                app:layout_constraintRight_toRightOf="@id/cvw_pix"
+                app:layout_constraintTop_toBottomOf="@id/cvw_pix"
+                tools:text="13/10" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</layout>
+

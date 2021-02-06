@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Desafio Android</string>
+
+    <string name="api_token">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</string>
+    <string name="api_url">https://desafio-mobile-bff.herokuapp.com/</string>
+
+    <string name="message_error_server">Erro ao conectar com o servidor! Por favor, verifique sue conexão com a Internet.</string>
+
+    <!-- Transfers Activity -->
+    <string name="title_transfer_activity">Extrato</string>
+    <string name="label_your_balance">Seu Saldo</string>
+    <string name="label_try_again">Tentar Novamente</string>
+    <string name="label_pix">Pix</string>
+    <string name="label_your_account">Sua conta</string>
+    <string name="label_your_movements">Suas movimentações</string>
+    <string name="message_success_get_balance">Meu saldo recuperado com sucesso!</string>
+    <string name="message_success_get_transfer_details">Detalhes da transferência recuperados com sucesso!</string>
+    <string name="message_success_list_transfers">Transferências listadas com sucesso!</string>
+
+    <!-- Transfer Details Activity -->
+    <string name="label_share">Compartilhar</string>
+    <string name="label_receipt">Comprovante</string>
+    <string name="label_transfer_type">Tipo de Transferência</string>
+    <string name="label_value">Valor</string>
+    <string name="label_receiver">Recebedor</string>
+    <string name="label_paying">Pagante</string>
+    <string name="label_bank_name">Instituição Bancária</string>
+    <string name="label_date_time">Data/Hora</string>
+    <string name="label_authentication">Autenticação</string>
+    <string name="text_share_image">Compartilhar Imagem</string>
+
+</resources>

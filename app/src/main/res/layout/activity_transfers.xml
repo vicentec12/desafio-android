@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="br.com.vicentec12.desafio_android.ui.transfers.TransfersViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.transfers.TransfersActivity">
+
+        <include
+            android:id="@+id/lyt_toolbar"
+            layout="@layout/layout_toolbar" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvw_home_balance_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_spacing"
+            android:text="@string/label_your_balance"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lyt_toolbar" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ibt_home_balance_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{(v) -> viewModel.setBalanceVisibility()}"
+            android:paddingHorizontal="@dimen/default_spacing"
+            android:src="@{viewModel.visibilityBalance == 1 ? @drawable/ic_visibility_off : @drawable/ic_visibility}"
+            app:layout_constraintBottom_toBottomOf="@id/tvw_home_balance_label"
+            app:layout_constraintLeft_toRightOf="@id/tvw_home_balance_label"
+            app:layout_constraintTop_toTopOf="@id/tvw_home_balance_label"
+            app:tint="@color/colorGreenApp"
+            tools:src="@drawable/ic_visibility_off" />
+
+        <ViewFlipper
+            android:id="@+id/vwf_home_balance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_spacing"
+            android:layout_marginTop="@dimen/minor_spacing"
+            android:inAnimation="@android:anim/fade_in"
+            app:displayChild="@{viewModel.childFlipperBalance}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvw_home_balance_label">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tvw_home_balance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.myBalance}"
+                android:textColor="@color/colorGreenApp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lyt_toolbar"
+                tools:text="R$ 1.208,00" />
+
+            <View
+                android:layout_width="144dp"
+                android:layout_height="@dimen/minor_spacing"
+                android:layout_gravity="center_vertical"
+                android:background="@color/colorGreenApp" />
+
+        </ViewFlipper>
+
+        <ViewFlipper
+            android:id="@+id/vwf_home"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/half_spacing"
+            android:inAnimation="@android:anim/fade_in"
+            app:displayChild="@{viewModel.childFlipper}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vwf_home_balance">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_spacing"
+                    android:text="@string/label_your_movements"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lyt_toolbar" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvw_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    app:items="@{viewModel.transfers}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_transfer" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <include
+                android:id="@+id/lyt_error_message"
+                layout="@layout/layout_error_message"
+                app:message="@{viewModel.messageError == 0 ? @string/message_error_server : context.getString(viewModel.messageError)}" />
+
+        </ViewFlipper>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
